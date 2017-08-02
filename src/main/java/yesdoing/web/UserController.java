@@ -2,38 +2,38 @@ package yesdoing.web;
 
 import java.util.ArrayList;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import yesdoing.dao.UserRepository;
 import yesdoing.domain.User;
 
 @Controller
 public class UserController {
-	ArrayList<User> users = new ArrayList<>();
+	@Autowired
+	UserRepository userRepository;
 	
 	@PostMapping("/users")
 	public ModelAndView create(User user) {		
-		users.add(user);
-		System.out.println("size : " + users.size());
-		
+		userRepository.addUser(user);
 		return new ModelAndView("redirect:/users");
 	}
 	
 	@GetMapping("/users")
 	public ModelAndView list() {
 		ModelAndView mav = new ModelAndView("user/list");
-		mav.addObject("users", users);
+		mav.addObject("users", userRepository.getUsers());
 		return mav;
 	}
 	
 	@GetMapping("/users/{index}")
 	public ModelAndView show(@PathVariable int index) {
-		User user = users.get(0);
 		ModelAndView mav = new ModelAndView("user/profile");
-		mav.addObject("user", user);
+		mav.addObject("user", userRepository.getUser(index));
 		return mav;
 	}
 }
