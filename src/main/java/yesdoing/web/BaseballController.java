@@ -10,11 +10,13 @@ import baseball.Baseball;
 
 @Controller
 public class BaseballController {
-    ArrayList<Integer> computerBalls = Baseball.generateComputerBalls();
+    ArrayList<Integer> computerBalls;
     
 	@GetMapping("/baseball")
 	public ModelAndView input(String inputValue) {
-		System.out.println("input value : " + inputValue);
+		if (computerBalls == null) {
+			computerBalls = Baseball.generateComputerBalls();
+		}
 		
         ArrayList<Integer> userBalls = Baseball.inputUserBalls(inputValue);
 
