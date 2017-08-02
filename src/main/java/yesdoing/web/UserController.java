@@ -36,4 +36,19 @@ public class UserController {
 		mav.addObject("user", userRepository.getUser(index));
 		return mav;
 	}
+	
+	@GetMapping("/users/{index}/form")
+	public ModelAndView updateUser(@PathVariable int index) {
+		User user = userRepository.getUser(index);
+		ModelAndView mav = new ModelAndView("user/updateForm");
+		mav.addObject("index", index);
+		mav.addObject("user", user);
+		return mav;
+	}
+	
+	@PostMapping("/users/{index}/form")
+	public ModelAndView updateSaveUser(@PathVariable int index, User user) {
+		userRepository.updateUser(index, user);
+		return new ModelAndView("redirect:/users");
+	}
 }

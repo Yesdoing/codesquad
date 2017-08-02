@@ -21,4 +21,8 @@ public class UserRepository {
 	public User getUser(int index) {
 		return users.get(index);
 	}
+	
+	public void updateUser(int index, User user) {
+		users.set(index, user);
+	}
 }
