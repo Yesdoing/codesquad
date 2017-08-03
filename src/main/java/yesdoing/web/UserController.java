@@ -30,6 +30,11 @@ public class UserController {
 		return mav;
 	}
 	
+	@GetMapping("/users/form")
+	public ModelAndView form() {
+		return new ModelAndView("user/form");
+	}
+	
 	@GetMapping("/users/{index}")
 	public ModelAndView show(@PathVariable int index) {
 		ModelAndView mav = new ModelAndView("user/profile");

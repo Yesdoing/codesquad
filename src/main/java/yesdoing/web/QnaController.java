@@ -29,4 +29,9 @@ public class QnaController {
 		mav.addObject("qna", qnaRepository.getQna(index));
 		return mav;
 	}
+	
+	@GetMapping("/qna/form")
+	public ModelAndView form() {
+		return new ModelAndView("qna/form");
+	}
 }
