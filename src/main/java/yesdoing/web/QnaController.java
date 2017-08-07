@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import yesdoing.dao.QnaRepository;
 import yesdoing.domain.Qna;
+import yesdoing.domain.User;
 
 @Controller
 @RequestMapping("/questions")
@@ -38,5 +39,29 @@ public class QnaController {
 			return "/qna/form";	
 		}
 		return "/user/login";
+	}
+	
+	@GetMapping("/{id}/form")
+	public String updateForm(@PathVariable long id, Model model, HttpSession session) {
+		Object value = session.getAttribute("sessionedUser");
+		System.out.println("updateForm!!!!!!!");
+		if(value != null) {
+			User user = (User)value;
+			
+			if(user.getUserId().equals(qnaRepository.findOne(id).getWriter())) {
+				model.addAttribute("qna", qnaRepository.findOne(id));
+				return "qna/updateForm";
+			} else return "qna/errorPages";
+		}
+		return "qna/errorPages";
+	}
+	
+	@PostMapping("/{id}/form")
+	public String update(@PathVariable long id, Qna qna, HttpSession session) {
+		Qna updateQna = qnaRepository.findOne(id);
+		updateQna.setTitle(qna.getTitle());
+		updateQna.setContents(qna.getContents());
+		qnaRepository.save(updateQna);
+		return "redirect:/";
 	}
 }
