@@ -1,5 +1,7 @@
 package yesdoing.web;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,7 +32,11 @@ public class QnaController {
 	}
 	
 	@GetMapping("/form")
-	public String form() {
-		return "/qna/form";
+	public String form(HttpSession session) {
+		Object value = session.getAttribute("sessionedUser");
+		if(value != null) {
+			return "/qna/form";	
+		}
+		return "/user/login";
 	}
 }
