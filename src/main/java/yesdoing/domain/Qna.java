@@ -1,10 +1,29 @@
 package yesdoing.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+@Entity
 public class Qna {
-	String writer;
-	String title;
-	String contents;
+	@Id
+	@GeneratedValue
+	private long id;
 	
+	@Column(nullable=false, length=20)
+	private String writer;
+	
+	private String title;
+	private String contents;
+
+	
+	public long getId() {
+		return id;
+	}
+	public void setId(long id) {
+		this.id = id;
+	}
 	public String getWriter() {
 		return writer;
 	}

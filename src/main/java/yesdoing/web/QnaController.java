@@ -1,37 +1,36 @@
 package yesdoing.web;
 
-import java.util.ArrayList;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import yesdoing.dao.QnaRepository;
 import yesdoing.domain.Qna;
 
 @Controller
+@RequestMapping("/questions")
 public class QnaController {
 	@Autowired
 	QnaRepository qnaRepository;
 	
-	@PostMapping("/questions")
-	public ModelAndView create(Qna qna) {
-		qnaRepository.insert(qna);
-		return new ModelAndView("redirect:/");
+	@PostMapping("")
+	public String create(Qna qna) {
+		qnaRepository.save(qna);
+		return "redirect:/";
 	}
 		
-	@GetMapping("/questions/{index}")
-	public ModelAndView show(@PathVariable int index) {
-		ModelAndView mav = new ModelAndView("/qna/show");
-		mav.addObject("qna", qnaRepository.getQna(index));
-		return mav;
+	@GetMapping("/{id}")
+	public String show(@PathVariable long id, Model model) {
+		model.addAttribute("qna", qnaRepository.findOne(id));
+		return "/qna/show";
 	}
 	
-	@GetMapping("/qna/form")
-	public ModelAndView form() {
-		return new ModelAndView("qna/form");
+	@GetMapping("/form")
+	public String form() {
+		return "/qna/form";
 	}
 }
