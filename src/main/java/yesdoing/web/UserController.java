@@ -71,10 +71,17 @@ public class UserController {
 		if(user != null) {
 			if(user.getPassword().equals(password)) {
 				session.setAttribute("sessionedUser", user);
-				return "/";
+				return "redirect:/";
 			} else {
 				return "redirect:/users/login";
 			}
 		} else return "redirect:/users/login";		
 	}
+	
+	@GetMapping("/logout")
+	public String logout(HttpSession session) {
+		session.invalidate();
+		return "redirect:/";
+	}
+	
 }
