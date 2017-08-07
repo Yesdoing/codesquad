@@ -43,10 +43,17 @@ public class UserController {
 	}
 	
 	@GetMapping("/{id}/form")
-	public String updateUser(@PathVariable long id, Model model) {
-		User user = userRepository.findOne(id);
-		model.addAttribute("user", user);
-		return "user/updateForm";
+	public String updateUser(@PathVariable long id, Model model, HttpSession session) {
+		Object value = session.getAttribute("sessionedUser");
+		if(value != null) {
+			User user = (User)value;			
+			if(user.getId().equals(userRepository.findOne(id).getId())) {
+				model.addAttribute("user", user);
+				return "/user/updateForm";
+			}
+		}
+		
+		return "user/errorPages";
 	}
 	
 	@PostMapping("/{id}/form")
@@ -73,9 +80,9 @@ public class UserController {
 				session.setAttribute("sessionedUser", user);
 				return "redirect:/";
 			} else {
-				return "redirect:/users/login";
+				return "/user/login_failed";
 			}
-		} else return "redirect:/users/login";		
+		} else return "/user/login_failed";		
 	}
 	
 	@GetMapping("/logout")
