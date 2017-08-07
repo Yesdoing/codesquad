@@ -5,6 +5,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,7 +45,6 @@ public class QnaController {
 	@GetMapping("/{id}/form")
 	public String updateForm(@PathVariable long id, Model model, HttpSession session) {
 		Object value = session.getAttribute("sessionedUser");
-		System.out.println("updateForm!!!!!!!");
 		if(value != null) {
 			User user = (User)value;
 			
@@ -63,5 +63,19 @@ public class QnaController {
 		updateQna.setContents(qna.getContents());
 		qnaRepository.save(updateQna);
 		return "redirect:/";
+	}
+	
+	@DeleteMapping("/{id}")
+	public String delete(@PathVariable long id, HttpSession session) {
+		Object value = session.getAttribute("sessionedUser");
+		if(value != null) {
+			User user = (User)value;
+			
+			if(user.getUserId().equals(qnaRepository.findOne(id).getWriter())) {
+				qnaRepository.delete(id);
+				return "redirect:/";
+			} else return "qna/errorPages";
+		}
+		return "/user/login";
 	}
 }
